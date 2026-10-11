@@ -1,0 +1,42 @@
+{
+  "name": "calendar-timer",
+  "version": "1.0.0",
+  "description": "Small always-on-top countdown timer to your next scheduled meeting.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis --publish=never"
+  },
+  "author": "Cardigan",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^44.0.0",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.cardigan.calendartimer",
+    "productName": "CalendarTimer",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "lib/**/*",
+      "renderer/**/*",
+      "meetings.example.json",
+      "package.json"
+    ],
+    "win": {
+      "target": ["nsis"]
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": false,
+      "createStartMenuShortcut": true,
+      "shortcutName": "CalendarTimer",
+      "runAfterFinish": true
+    }
+  }
+}

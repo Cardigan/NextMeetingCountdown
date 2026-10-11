@@ -1,0 +1,109 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+  user-select: none;
+  --cd-scale: 1;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background: rgba(24, 26, 32, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #f0f0f0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.close-btn,
+.edit-btn,
+.settings-btn {
+  -webkit-app-region: no-drag;
+  position: absolute;
+  top: 2px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  border-radius: 4px;
+  transition: transform 0.08s ease, background 0.08s ease;
+}
+
+.close-btn {
+  right: 2px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 16px;
+}
+
+.close-btn:hover,
+.edit-btn:hover,
+.settings-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.close-btn:active,
+.edit-btn:active,
+.settings-btn:active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  transform: scale(0.85);
+}
+
+.edit-btn {
+  right: 22px;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.settings-btn {
+  right: 42px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+}
+
+.title {
+  font-size: calc(12px * var(--cd-scale, 1));
+  color: rgba(255, 255, 255, 0.65);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+
+.card.size-small .title {
+  display: none;
+}
+
+.remaining {
+  font-size: calc(26px * var(--cd-scale, 1));
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.remaining.imminent {
+  color: #ff5c5c;
+}
+
+.subtitle {
+  font-size: calc(11px * var(--cd-scale, 1));
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 2px;
+}

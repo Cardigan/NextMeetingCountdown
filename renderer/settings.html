@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>CalendarTimer — Settings</title>
+  <link rel="stylesheet" href="settings.css" />
+</head>
+<body>
+  <div class="header">
+    <h1>Settings</h1>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="form-wrap">
+    <section class="group">
+      <h2>Countdown appearance</h2>
+      <label class="field">
+        <span>Background color</span>
+        <input type="color" id="countdownColor" value="#181a20" />
+      </label>
+      <label class="field">
+        <span>Opacity (<span id="countdownOpacityValue">88</span>%)</span>
+        <input type="range" id="countdownOpacity" min="30" max="100" step="5" value="88" />
+      </label>
+      <label class="field">
+        <span>Size</span>
+        <select id="countdownSize">
+          <option value="small">Small</option>
+          <option value="medium">Medium</option>
+          <option value="large">Large</option>
+        </select>
+      </label>
+    </section>
+
+    <section class="group">
+      <h2>Flash appearance</h2>
+      <label class="field">
+        <span>Flash color</span>
+        <input type="color" id="flashColor" value="#ffffff" />
+      </label>
+      <label class="field">
+        <span>Flash opacity (<span id="opacityValue">55</span>%)</span>
+        <input type="range" id="flashOpacity" min="10" max="100" step="5" value="55" />
+      </label>
+      <label class="field">
+        <span>Flashes (max 2 per second)</span>
+        <select id="flashCount">
+          <option value="1">1 flash</option>
+          <option value="2">2 flashes</option>
+        </select>
+      </label>
+    </section>
+
+    <section class="group">
+      <h2>Sound</h2>
+      <label class="checkbox-field">
+        <input type="checkbox" id="soundEnabled" />
+        <span>Play a sound when flashing</span>
+      </label>
+    </section>
+
+    <section class="group">
+      <h2>When flashes occur</h2>
+      <label class="checkbox-field">
+        <input type="checkbox" id="flashAt5Min" />
+        <span>5 minutes before meeting</span>
+      </label>
+      <label class="checkbox-field">
+        <input type="checkbox" id="flashAt1Min" />
+        <span>1 minute before meeting</span>
+      </label>
+      <label class="checkbox-field">
+        <input type="checkbox" id="flashAtStart" />
+        <span>At meeting start time</span>
+      </label>
+    </section>
+
+    <section class="group">
+      <h2>Seconds display</h2>
+      <label class="radio-field">
+        <input type="radio" name="secondsDisplay" id="secondsAuto" value="auto" />
+        <span>Only under 5 minutes (default)</span>
+      </label>
+      <label class="radio-field">
+        <input type="radio" name="secondsDisplay" id="secondsAlways" value="always" />
+        <span>Always show seconds</span>
+      </label>
+      <label class="radio-field">
+        <input type="radio" name="secondsDisplay" id="secondsNever" value="never" />
+        <span>Never show seconds</span>
+      </label>
+    </section>
+
+    <section class="group">
+      <h2>Meetings file</h2>
+      <label class="field">
+        <span>Current location</span>
+        <input type="text" id="meetingsPath" readonly />
+      </label>
+      <div class="meetings-path-actions">
+        <button id="choosePathBtn" class="secondary" type="button">Change location…</button>
+        <button id="resetPathBtn" class="secondary" type="button">Reset to default</button>
+      </div>
+      <div class="status" id="meetingsPathStatus"></div>
+    </section>
+  </div>
+
+  <div class="actions">
+    <button id="testFlashBtn" class="secondary">Test flash</button>
+    <div class="right">
+      <button id="cancelBtn" class="secondary">Cancel</button>
+      <button id="saveBtn" class="primary">Save</button>
+    </div>
+  </div>
+
+  <script src="settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "sunday": [],
+  "monday": [
+    {
+      "time": "16:00",
+      "title": "Example: Mentor meeting",
+      "recurrence": "biweekly",
+      "date": "2026-10-12"
+    }
+  ],
+  "tuesday": [
+    {
+      "time": "11:05",
+      "title": "Example: Team Standup"
+    }
+  ],
+  "wednesday": [],
+  "thursday": [
+    {
+      "time": "10:05",
+      "title": "Example: Weekly Sync"
+    }
+  ],
+  "friday": [],
+  "saturday": []
+}
