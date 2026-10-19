@@ -10,6 +10,17 @@ const { getNextMeeting, formatRemaining } = require('./lib/schedule');
 // how package.json's "name"/"productName" are set.
 app.setName('CalendarTimer');
 
+// On machines where the GPU/video driver isn't reliably accessible (common
+// over Remote Desktop or in VMs — surfaces as
+// "GetGpuDriverOverlayInfo: Failed to retrieve video device"), Chromium's
+// GPU compositor can fail to initialize. Our countdown/flash windows rely on
+// `transparent: true`, which needs GPU compositing (DirectComposition on
+// Windows) to actually paint; without it the window exists but renders
+// nothing. Disabling hardware acceleration forces software rendering, which
+// keeps transparency working everywhere at a negligible cost for this app's
+// simple UI.
+app.disableHardwareAcceleration();
+
 // This app has no GPU-heavy rendering, so skip the GPU shader disk cache
 // entirely. On machines with real-time antivirus scanning, Chromium's cache
 // rename-on-startup can hit a transient file lock and spam harmless
@@ -330,15 +341,41 @@ function saveWindowState() {
 
 // --- Windows ---
 
+// A saved position can become stale (monitor disconnected, resolution
+// changed, display arrangement changed) and land fully outside every
+// current display. When that happens the window still technically opens,
+// but is invisible and unreachable, which looks like the app "isn't
+// starting." Fall back to a safe on-screen position whenever the saved
+// point isn't at least partly visible on some display.
+function clampToVisibleArea(x, y, width, height) {
+  const displays = screen.getAllDisplays();
+  const fitsSomeDisplay = displays.some((d) => (
+    x < d.bounds.x + d.bounds.width
+    && x + width > d.bounds.x
+    && y < d.bounds.y + d.bounds.height
+    && y + height > d.bounds.y
+  ));
+  if (fitsSomeDisplay) return { x, y };
+
+  const primary = screen.getPrimaryDisplay();
+  return {
+    x: primary.workArea.x + primary.workArea.width - width - 20,
+    y: primary.workArea.y + primary.workArea.height - height - 20,
+  };
+}
+
 function createCountdownWindow() {
   const state = loadWindowState();
   const defaults = getCountdownSizePreset();
+  const position = state
+    ? clampToVisibleArea(state.x, state.y, defaults.width, defaults.height)
+    : null;
 
   countdownWindow = new BrowserWindow({
     width: defaults.width,
     height: defaults.height,
-    x: state ? state.x : undefined,
-    y: state ? state.y : undefined,
+    x: position ? position.x : undefined,
+    y: position ? position.y : undefined,
     frame: false,
     transparent: true,
     hasShadow: false,
