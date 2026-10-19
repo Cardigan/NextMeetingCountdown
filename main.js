@@ -10,6 +10,23 @@ const { getNextMeeting, formatRemaining } = require('./lib/schedule');
 // how package.json's "name"/"productName" are set.
 app.setName('CalendarTimer');
 
+// This app has no GPU-heavy rendering, so skip the GPU shader disk cache
+// entirely. On machines with real-time antivirus scanning, Chromium's cache
+// rename-on-startup can hit a transient file lock and spam harmless
+// "Unable to move the cache: Access is denied" errors to stderr; disabling
+// the cache avoids that startup rename altogether.
+app.commandLine.appendSwitch('disable-gpu-shader-disk-cache');
+
+// Only one instance may run at a time. Without this, auto-start-at-login
+// plus a manual launch (or a double-click) can race on the same userData
+// disk/GPU cache, producing "Unable to move the cache: Access is denied"
+// Chromium errors. If another instance already holds the lock, quit
+// immediately instead of competing for the same files.
+const gotSingleInstanceLock = app.requestSingleInstanceLock();
+if (!gotSingleInstanceLock) {
+  app.quit();
+}
+
 const AUTOSTART_ARG = '--autostart';
 const APP_STATE_FILE = path.join(app.getPath('userData'), 'app-state.json');
 const WINDOW_STATE_FILE = path.join(app.getPath('userData'), 'window-state.json');
@@ -566,7 +583,21 @@ function showCountdownContextMenu(key) {
 
 // --- App lifecycle ---
 
+// A second launch attempt (e.g. double-clicking the shortcut while already
+// running) hits this instead of creating a competing window set.
+app.on('second-instance', () => {
+  if (countdownWindow) {
+    if (countdownWindow.isMinimized()) countdownWindow.restore();
+    countdownWindow.show();
+    countdownWindow.focus();
+  }
+});
+
 app.whenReady().then(() => {
+  if (!gotSingleInstanceLock) {
+    return;
+  }
+
   configureAutoLaunch();
 
   const launchedViaAutostart = process.argv.includes(AUTOSTART_ARG);
